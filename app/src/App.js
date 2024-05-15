@@ -11,10 +11,15 @@ function App() {
   const [tries, setTries] = useState(0);
   const [result, setResult] = useState(null);
   const [won, setWon] = useState(false);
+  const [name, setName] = useState("");
 
   async function startGame(){
     setLoading(true)
-    const response = await fetch("http://localhost:8080/partita", {method: "POST"});
+    const response = await fetch("http://localhost:8080/partita", {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({nome: name})
+    });
     const r = await response.json();
     setGameId(r.id);
     setStarted(true);
@@ -54,6 +59,10 @@ function App() {
     setWon(false);
   }
 
+  function handleName(e){
+    setName(e.target.value);
+  }
+
   return (
     <div className="App">
       {loading &&
@@ -62,8 +71,12 @@ function App() {
 
       {!started && !loading &&
         <>
+          <p>questo commit non fa, ho provato a fare il bonus e rotto tutto, il commit prima funziona ma non ha bonus</p>
           <h1>avvia partita</h1>
-          <button onClick={startGame}>avvia partita</button>
+          <form>
+            <input type="text" required onChange={handleName} placeholder='inserisci nome'></input>
+            <input type="submit" onClick={startGame}></input>
+          </form>
         </>
       }
       
